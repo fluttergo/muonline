@@ -3,9 +3,9 @@
 Base on MU Online (MonoGame)
 基于MonoGame引擎的客户端版本, 支持S20客户端资源
 
-Monster(./monster.gif)
+![Monster](./monster.gif)
 
-NPC(./npc.gif)
+![NPC](./npc.gif)
 
 A cross-platform MuOnline client implementation built with .NET 9.0 and MonoGame framework. Supports Windows, Android, iOS, Linux, and macOS platforms.
 
