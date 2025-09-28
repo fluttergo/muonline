@@ -9,21 +9,25 @@ using Client.Main.Core.Utilities;
 
 namespace Client.Main.Objects.Monsters
 {
+    [NpcInfo(71, "Mega Crust")]
     public class MegaCrust : MonsterObject
     {
         private WeaponObject _rightHandWeapon;
         private WeaponObject _leftHandWeapon;
         public MegaCrust()
         {
+            Scale = 1.1f;
             _rightHandWeapon = new WeaponObject
             {
                 LinkParentAnimation = false,
-                ParentBoneLink = 42
+                ParentBoneLink = 36,
+                ItemLevel = 5
             };
             _leftHandWeapon = new WeaponObject
             {
                 LinkParentAnimation = false,
-                ParentBoneLink = 43 // Assuming 43 is left hand
+                ParentBoneLink = 45,
+                ItemLevel = 0
             };
             Children.Add(_rightHandWeapon);
             Children.Add(_leftHandWeapon);

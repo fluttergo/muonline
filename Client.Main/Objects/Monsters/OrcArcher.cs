@@ -9,17 +9,27 @@ using Client.Main.Core.Utilities;
 
 namespace Client.Main.Objects.Monsters
 {
+    [NpcInfo(64, "Orc Archer")]
     public class OrcArcher : MonsterObject
     {
         private WeaponObject _rightHandWeapon;
+        private WeaponObject _leftHandWeapon;
         public OrcArcher()
         {
+            Scale = 1.2f;
             _rightHandWeapon = new WeaponObject
             {
                 LinkParentAnimation = false,
-                ParentBoneLink = 42
+                ParentBoneLink = 39
+            };
+            _leftHandWeapon = new WeaponObject
+            {
+                LinkParentAnimation = false,
+                ParentBoneLink = 39,
+                ItemLevel = 3
             };
             Children.Add(_rightHandWeapon);
+            Children.Add(_leftHandWeapon);
         }
 
         public override async Task Load()

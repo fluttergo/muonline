@@ -7,7 +7,7 @@ using Client.Main.Objects.Player;
 
 namespace Client.Main.Controllers
 {
-    public enum AnimationType { Idle, Walk, Attack, Skill, Emote, Death, Rest, Sit }
+    public enum AnimationType { Idle, Walk, Attack, Skill, Emote, Death, Rest, Sit, Appear }
 
     public sealed class AnimationController : IDisposable
     {
@@ -194,12 +194,14 @@ namespace Client.Main.Controllers
             if (a == null || idx >= a.Length) return false;
 
             var act = a[idx];
+            if (act == null) return false; // Handle null actions gracefully
+
             duration = CalcDuration(act);
             return true;
         }
 
         private static bool IsReturnable(AnimationType t)
-            => t is AnimationType.Attack or AnimationType.Skill or AnimationType.Emote;
+            => t is AnimationType.Attack or AnimationType.Skill or AnimationType.Emote or AnimationType.Appear;
 
         private bool AllowWhenDead(AnimationType t)
         {
@@ -220,7 +222,7 @@ namespace Client.Main.Controllers
         private static AnimationType GetPlayerAnimationType(PlayerAction a) => a switch
         {
             PlayerAction.PlayerDie1 or PlayerAction.PlayerDie2 => AnimationType.Death,
-            PlayerAction.PlayerPoseMale1 or PlayerAction.PlayerPose1 => AnimationType.Rest,
+            PlayerAction.PlayerPoseMale1 or PlayerAction.PlayerPoseMale1 => AnimationType.Rest,
             PlayerAction.PlayerSit1 or PlayerAction.PlayerSitFemale1 => AnimationType.Sit,
             PlayerAction.PlayerStopMale or PlayerAction.PlayerStopFemale or PlayerAction.PlayerStopFly
                                                                                => AnimationType.Idle,
@@ -238,7 +240,10 @@ namespace Client.Main.Controllers
             // PlayerAction.BlowSkill or PlayerAction.TwistingSlashSkill or
             // PlayerAction.FlameSkill or PlayerAction.EvilSpiritSkill => AnimationType.Skill,
             PlayerAction.PlayerGreeting1 or PlayerAction.PlayerGoodbye1 or
-            PlayerAction.PlayerClap1 or PlayerAction.PlayerCheer1 => AnimationType.Emote,
+            PlayerAction.PlayerClap1 or PlayerAction.PlayerCheer1 or
+            PlayerAction.PlayerSee1 or PlayerAction.PlayerSeeFemale1 or
+            PlayerAction.PlayerWin1 or PlayerAction.PlayerWinFemale1 or
+            PlayerAction.PlayerSmile1 or PlayerAction.PlayerSmileFemale1 => AnimationType.Emote,
             _ => AnimationType.Idle
         };
 
@@ -252,11 +257,14 @@ namespace Client.Main.Controllers
             MonsterActionType.Attack1 or MonsterActionType.Attack2
                                                         => AnimationType.Attack,
             MonsterActionType.Shock => AnimationType.Emote,
+            MonsterActionType.Appear => AnimationType.Appear,
             _ => AnimationType.Idle
         };
 
         private float CalcDuration(Client.Data.BMD.BMDTextureAction act)
         {
+            if (act == null) return 1.0f; // Default duration for null actions
+
             float frames = Math.Max(act.NumAnimationKeys, 1);
             float mul = act.PlaySpeed == 0 ? 1f : act.PlaySpeed;
             float fps = Math.Max(0.1f, _owner.AnimationSpeed * mul);

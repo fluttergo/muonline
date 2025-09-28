@@ -1,33 +1,33 @@
-using Client.Main.Content;
-using Client.Main.Controllers;
-using Client.Main.Models;
+﻿using Client.Main.Content;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Client.Main.Objects.Player;
 using Client.Main.Core.Utilities;
-using Microsoft.Xna.Framework;
-using System.Threading.Tasks;
 
 namespace Client.Main.Objects.Monsters
 {
-    [NpcInfo(5, "Hell Hound")]
-    public class HellHound : Hound // Inherits from Hound as it uses the same model/sounds
+    [NpcInfo(74, "Alpha Crust")]
+    public class AlphaCrust : MonsterObject
     {
         private WeaponObject _rightHandWeapon;
         private WeaponObject _leftHandWeapon;
-        public HellHound()
+        public AlphaCrust()
         {
-            // Override scale if needed, base constructor sets it to 0.85f
-            Scale = 1.1f; // Set according to C++ Setting_Monster
+            Scale = 1.3f;
             _rightHandWeapon = new WeaponObject
             {
                 LinkParentAnimation = false,
-                ParentBoneLink = 19,
-                ItemLevel = 1
+                ParentBoneLink = 36,
+                ItemLevel = 9
             };
             _leftHandWeapon = new WeaponObject
             {
                 LinkParentAnimation = false,
-                ParentBoneLink = 14,
-                ItemLevel = 1
+                ParentBoneLink = 45,
+                ItemLevel = 9
             };
             Children.Add(_rightHandWeapon);
             Children.Add(_leftHandWeapon);
@@ -35,17 +35,15 @@ namespace Client.Main.Objects.Monsters
 
         public override async Task Load()
         {
-            var item = ItemDatabase.GetItemDefinition(0, 7); // Falchion
+            Model = await BMDLoader.Instance.Prepare($"Monster/Monster53.bmd"); // TODO
+            var item = ItemDatabase.GetItemDefinition(0, 18); // Thunder Blade
             if (item != null)
                 _rightHandWeapon.Model = await BMDLoader.Instance.Prepare(item.TexturePath);
-            var shield = ItemDatabase.GetItemDefinition(6, 9); // Plate Shield
+            var shield = ItemDatabase.GetItemDefinition(6, 14); // Legendary Shield
             if (shield != null)
                 _leftHandWeapon.Model = await BMDLoader.Instance.Prepare(shield.TexturePath);
-
+        
             await base.Load();
         }
-
-        // Load() and sound methods are inherited from Hound
-        // Sounds are inherited from Hound
     }
 }
