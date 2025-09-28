@@ -320,3 +320,6 @@ AssetsServer/Assets/
 
 .claude/settings.local.json
 ServerPackets/
+Client.Unity/Library
+Client.Unity/Temp
+Client.Unity/Assets/Resources.zip
